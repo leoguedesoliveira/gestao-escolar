@@ -1,7 +1,10 @@
 package com.lgtech.gestao_escolar.service;
 
 
+import com.lgtech.gestao_escolar.dto.EscolaDTO.EscolaRequestDTO;
 import com.lgtech.gestao_escolar.entity.Escola;
+import com.lgtech.gestao_escolar.exceptions.EscolaExistException;
+import com.lgtech.gestao_escolar.exceptions.EscolaNotFoundException;
 import com.lgtech.gestao_escolar.repository.EscolaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,22 +19,27 @@ public class EscolaService {
     @Autowired
     private EscolaRepository escolaRepository;
 
-    public Escola inserir(Escola escola) {
-        return escolaRepository.save(escola);
+    public Escola inserir(EscolaRequestDTO escola) {
+        if( escolaRepository.findByNome(escola.nome()).isPresent() ) {
+            throw new EscolaExistException();
+        } else {
+            Escola escolaData = new Escola(escola);
+            return escolaRepository.save(escolaData);
+        }
     }
 
-    public Escola alterar(Integer id, Escola escola) {
+    public Escola alterar(Integer id, EscolaRequestDTO escola) {
         Optional<Escola> escolaData = escolaRepository.findById(id);
 
         if (escolaData.isPresent()) {
             Escola escolaExistente = escolaData.get();
 
-            escolaExistente.setNome(escola.getNome());
+            escolaExistente.setNome(escola.nome());
             escolaRepository.save(escolaExistente);
 
             return escolaExistente;
         } else {
-            throw new RuntimeException("Escola não encontrada");
+            throw new EscolaNotFoundException();
         }
     }
 
@@ -45,7 +53,7 @@ public class EscolaService {
 
             return "Escola excluída com sucesso";
         } else {
-            throw new RuntimeException("Escola não encontrada");
+            throw new EscolaNotFoundException();
         }
     }
 
@@ -58,7 +66,7 @@ public class EscolaService {
         if(escola.isPresent()) {
             return escola.get();
         } else {
-            throw new RuntimeException("Escola não encontrada");
+            throw new EscolaNotFoundException();
         }
     }
 }

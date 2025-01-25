@@ -1,5 +1,6 @@
 package com.lgtech.gestao_escolar.entity;
 
+import com.lgtech.gestao_escolar.dto.EscolaDTO.EscolaRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +12,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 public class Escola {
 
     @Id
@@ -21,4 +21,28 @@ public class Escola {
 
     @Column(name = "NM_ESCOLA")
     private String nome;
+
+    public Escola(EscolaRequestDTO data) {
+        this.nome = data.nome();
+    }
+
+    public Escola() {
+
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 }
