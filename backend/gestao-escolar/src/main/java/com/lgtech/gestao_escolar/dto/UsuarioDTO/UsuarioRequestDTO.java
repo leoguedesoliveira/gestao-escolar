@@ -11,5 +11,6 @@ public record UsuarioRequestDTO(
         String email,
         String senha,
         @JsonProperty("escola") Integer escola,
-        @JsonProperty("unidade") Integer unidade
+        @JsonProperty("unidade") Integer unidade,
+        String role
 ) { }

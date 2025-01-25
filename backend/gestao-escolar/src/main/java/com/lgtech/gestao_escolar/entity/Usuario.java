@@ -5,7 +5,12 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Table(name = "USUARIOS")
@@ -13,7 +18,7 @@ import java.util.Optional;
 @Getter
 @Setter
 @AllArgsConstructor
-public class Usuario {
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,9 +34,9 @@ public class Usuario {
     @Column(name = "DS_SENHA")
     private String senha;
 
-    @Column(name = "DS_ROLE")
-    private String role;
-
+    @Column(name = "ds_role")
+    @Enumerated(EnumType.STRING)
+    private UsuarioRole role;
 
     @ManyToOne
     @JoinColumn(name = "ID_ESCOLA", referencedColumnName = "ID_ESCOLA")
@@ -94,9 +99,51 @@ public class Usuario {
         this.senha = data.senha();
         this.escola = new Escola(data.escola());
         this.unidade = data.unidade() != null ? data.unidade() : null;
+        try {
+            this.role = UsuarioRole.valueOf(data.role().toUpperCase());
+        } catch (IllegalArgumentException | NullPointerException e) {
+            throw new IllegalArgumentException("Role enviada no cadastro é inválida: " + data.role());
+        }
+
     }
 
     public Usuario() {
 
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if(this.role == UsuarioRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

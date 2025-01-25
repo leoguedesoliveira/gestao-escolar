@@ -6,6 +6,7 @@ import com.lgtech.gestao_escolar.exceptions.UsuarioEmailExist;
 import com.lgtech.gestao_escolar.exceptions.UsuarioNotFound;
 import com.lgtech.gestao_escolar.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,10 +19,14 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     public Usuario inserir(UsuarioRequestDTO data) {
-        if(usuarioRepository.findByEmail(data.email()).isPresent()) {
+        if(usuarioRepository.findByEmail(data.email()) != null) {
             throw new UsuarioEmailExist();
         } else {
             Usuario usuario = new Usuario(data);
+
+            String senhaCriptografada = new BCryptPasswordEncoder().encode(usuario.getSenha());
+            usuario.setSenha(senhaCriptografada);
+
             return usuarioRepository.save(usuario);
         }
     }
