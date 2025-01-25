@@ -1,17 +1,18 @@
 package com.lgtech.gestao_escolar.entity;
 
+import com.lgtech.gestao_escolar.dto.UsuarioDTO.UsuarioRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Optional;
 
 @Table(name = "USUARIOS")
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 public class Usuario {
 
     @Id
@@ -33,8 +34,66 @@ public class Usuario {
     @JoinColumn(name = "ID_ESCOLA", referencedColumnName = "ID_ESCOLA")
     private Escola escola;
 
-    @ManyToOne
-    @JoinColumn(name = "ID_UNIDADE", referencedColumnName = "ID_UNIDADE")
-    private Unidade unidade;
+    @Column(name = "ID_UNIDADE")
+    private Integer unidade;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public Escola getEscola() {
+        return escola;
+    }
+
+    public void setEscola(Escola escola) {
+        this.escola = escola;
+    }
+
+    public Integer getUnidade() {
+        return unidade;
+    }
+
+    public void setUnidade(Integer unidade) {
+        this.unidade = unidade;
+    }
+
+    public Usuario(UsuarioRequestDTO data) {
+        this.nome = data.nome();
+        this.email = data.email();
+        this.senha = data.senha();
+        this.escola = new Escola(data.escola());
+        this.unidade = data.unidade() != null ? data.unidade() : null;
+    }
+
+    public Usuario() {
+
+    }
 }

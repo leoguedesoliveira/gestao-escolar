@@ -30,6 +30,10 @@ public class Escola {
 
     }
 
+    public Escola(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }
