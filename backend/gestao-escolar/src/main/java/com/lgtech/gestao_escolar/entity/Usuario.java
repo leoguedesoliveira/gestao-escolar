@@ -29,6 +29,9 @@ public class Usuario {
     @Column(name = "DS_SENHA")
     private String senha;
 
+    @Column(name = "DS_ROLE")
+    private String role;
+
 
     @ManyToOne
     @JoinColumn(name = "ID_ESCOLA", referencedColumnName = "ID_ESCOLA")
