@@ -1,7 +1,10 @@
 package com.lgtech.gestao_escolar.controller;
 
 import com.lgtech.gestao_escolar.dto.UsuarioDTO.AuthenticationDTO;
+import com.lgtech.gestao_escolar.dto.UsuarioDTO.LoginResponseDTO;
+import com.lgtech.gestao_escolar.entity.Usuario;
 import com.lgtech.gestao_escolar.exceptions.LoginInvalidoExcepition;
+import com.lgtech.gestao_escolar.infra.Security.TokenService;
 import com.lgtech.gestao_escolar.repository.UsuarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +28,18 @@ public class AuthenticationController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
         var usuarioSenha = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
         var auth = authenticationManager.authenticate(usuarioSenha);
 
+        var token = tokenService.generateToken((Usuario) auth.getPrincipal());
+
         if(auth.isAuthenticated()) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(new LoginResponseDTO(token));
         } else {
             throw new LoginInvalidoExcepition();
         }
