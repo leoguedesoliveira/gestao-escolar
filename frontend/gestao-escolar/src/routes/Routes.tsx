@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "../pages/Login";
 import Home from "../pages/Home";
 import PrivateRoute from "../components/PrivateRoutes/PrivateRoute";
+import CadastroEscolas from "../pages/CadastroEscolas";
 
 const AppRoutes = () => {
     return(
@@ -14,6 +15,14 @@ const AppRoutes = () => {
                     element={
                         <PrivateRoute>
                             <Home />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/escolas"
+                    element={
+                        <PrivateRoute>
+                            <CadastroEscolas />
                         </PrivateRoute>
                     }
                 />

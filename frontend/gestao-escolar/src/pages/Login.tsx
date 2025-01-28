@@ -40,7 +40,7 @@ const Login = () => {
             });
             
             const { token } = response.data;
-            Cookies.set("authToken", token, { expires: 7 });
+            Cookies.set("authToken", token, { expires: 1/24 });
             
             navigate("/home")
 

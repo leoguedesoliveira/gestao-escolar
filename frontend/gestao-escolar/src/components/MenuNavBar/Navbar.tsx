@@ -22,38 +22,41 @@ const menuItems: MenuItem[] = [
   {
     label: 'Home',
     path: '/home',
-    roles: ['ADMIN', 'USER', 'TEACHER']
+    roles: ['ADMIN', 'DIRECTOR', 'USER']
   },
   {
-    label: 'Administração',
+    label: 'Configuração',
     roles: ['ADMIN'],
     subItems: [
       {
-        label: 'Gerenciar Usuários',
-        path: '/admin/users',
+        label: 'Escolas',
+        path: '/escolas',
         roles: ['ADMIN']
       },
       {
-        label: 'Configurações',
-        path: '/admin/settings',
-        roles: ['ADMIN']
+        label: 'Unidades',
+        path: '/unidades',
+        roles: ['ADMIN', 'DIRECTOR']
+      },
+      {
+        label: 'Usuários',
+        path: '/usuarios',
+        roles: ['ADMIN', 'DIRECTOR']
       }
     ]
   },
   {
-    label: 'Acadêmico',
-    roles: ['ADMIN', 'TEACHER'],
+    label: 'Pré Cadastros',
+    roles: ['ADMIN', 'USER', 'DIRECTOR'],
     subItems: [
-      {
-        label: 'Notas',
-        path: '/academic/grades',
-        roles: ['ADMIN', 'TEACHER']
-      },
-      {
-        label: 'Frequência',
-        path: '/academic/attendance',
-        roles: ['ADMIN', 'TEACHER']
-      }
+      
+    ]
+  },
+  {
+    label: 'Acadêmico',
+    roles: ['ADMIN', 'USER', 'DIRECTOR'],
+    subItems: [
+      
     ]
   }
 ];
@@ -89,7 +92,7 @@ const Navbar = () => {
         <div className="flex justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <span className="text-2xl font-bold text-blue-900">LGTech</span>
+            <span className="text-2xl font-bold text-black">LGTech</span>
           </div>
 
           {/* Menu Principal */}
@@ -102,8 +105,8 @@ const Navbar = () => {
                 onMouseLeave={handleMouseLeave}
               >
                 <div
-                  className={`flex items-center h-16 px-4 cursor-pointer text-gray-900 hover:text-blue-800 transition-colors ${
-                    openDropdown === item.label ? 'text-blue-800' : ''
+                  className={`flex items-center h-16 px-4 cursor-pointer text-gray-800 hover:text-cyan-500 transition-colors ${
+                    openDropdown === item.label ? 'text-cyan-500' : ''
                   }`}
                   onClick={() => item.path && navigate(item.path)}
                 >
@@ -121,7 +124,7 @@ const Navbar = () => {
                       .map((subItem) => (
                         <div
                           key={subItem.label}
-                          className="px-4 py-2 text-gray-900 hover:bg-blue-50 hover:text-blue-800 cursor-pointer"
+                          className="px-4 py-2 text-gray-800 hover:bg-blue-50 hover:text-cyan-500 cursor-pointer"
                           onClick={() => navigate(subItem.path)}
                         >
                           {subItem.label}
@@ -136,14 +139,14 @@ const Navbar = () => {
           {/* Perfil e Logout */}
           <div className="flex items-center space-x-4">
             <button
-              className="flex items-center text-gray-900 hover:text-blue-800"
+              className="flex items-center text-gray-800 hover:text-cyan-600"
               onClick={() => navigate('/profile')}
             >
               <User className="w-5 h-5 mr-1" />
               <span>Perfil</span>
             </button>
             <button
-              className="flex items-center text-gray-900 hover:text-blue-800"
+              className="flex items-center text-gray-800 hover:text-red-600"
               onClick={handleLogout}
             >
               <LogOut className="w-5 h-5 mr-1" />
